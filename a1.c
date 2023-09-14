@@ -10,7 +10,7 @@
  */
 void generate_selections(int a[], int n, int k, int b[], void *data, void (*process_selection)(int *b, int k, void *data))
 {}
-
+// This is Hitesh here.
 /*
  * See Exercise 2 (a), page 94 in Jeff Erickson's textbook.
  * The exercise only asks you to count the possible splits.
