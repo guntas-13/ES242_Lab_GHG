@@ -17,13 +17,50 @@ void generate_splits(const char *source, const char *dictionary[], int nwords, c
  * Transform a[] so that it becomes the previous permutation of the elements in it.
  * If a[] is the first permutation, leave it unchanged.
  */
+
+// This is Gaurav Budhwani - 22110085 :)
 void previous_permutation(int a[], int n)
-{}
+{
+    int first = n - 2, second = n - 1, temp, m, k = 0, i;
+    while (a[first] < a[first + 1])
+        first--;
+        if (first < 0)
+            return;
+        while(a[first] < a[second])
+            second--;
+            temp = a[first];
+            a[first] = a[second];
+            a[second] = temp;
+            m = (n - first - 1)/2;
+            for(i = first+1; i<first+1+m; i++)
+            {
+                temp = a[i];
+                a[i] = a[n-1-k];
+                a[n-1-k] = temp;
+                k++;
+            }
+}
 
 /* Write your tests here. Use the previous assignment for reference. */
+BEGIN_TEST(previous_permutation) {
+    int a[] = { 2, 3 ,1 };
+    previous_permutation(a, 3);
+    ASSERT_ARRAY_VALUES_EQ(a, 3, "Failed on <2,3,1>.", 2, 1, 3);
 
-// BEGIN_TEST(generate_selections) {
-// } END_TEST
+    int b[] = { 1, 3, 2 };
+    previous_permutation(b, 3);
+    ASSERT_ARRAY_VALUES_EQ(b, 3, "Failed on <1,3,2>.", 1, 2, 3);
+
+    int c[] = { 2, 1, 3, 4 };
+    previous_permutation(c, 4);
+    ASSERT_ARRAY_VALUES_EQ(c, 4, "Failed on <2,1,3,4>.", 1, 4, 3, 2);
+
+    int d[] = { [0]=2, [1]=1, [2]=3, [3]=4, [4] = 5};
+    previous_permutation(d, 5);
+    ASSERT_ARRAY_VALUES_EQ(d, 5, "Failed on <2,1,3,4,5>.", 1, 5, 4, 3, 2); /* lexiographic permutation in this case is 2,1,3,4,5 ggs*/
+
+}END_TEST
+
 
 
 // This is Guntas Singh Saran - 22110089 !
@@ -69,10 +106,17 @@ int main()
     //     TEST(generate_selections),
     //     0
     // });
+    
     int a[] = {1, 2, 3, 4, 5};
     int n = 5;
     int k = 2;
     int b[k];
     generate_selections(a, n, k, b, NULL, print_array_b);
+    
+    // testing previous permutations
+    run_tests ((test_t []){
+        TEST(previous_permutation),
+        0
+    });
     return 0;
 }
