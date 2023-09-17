@@ -23,21 +23,6 @@ void previous_permutation(int a[], int n)
 /* Write your tests here. Use the previous assignment for reference. */
 
 // BEGIN_TEST(generate_selections) {
-//     int a[] = {1, 2, 3, 4, 5};
-//     int n = 5;
-//     int k = 3;
-//     int b[k];
-//     generate_selections(a, n, k, b, NULL, );
-//     ASSERT_ARRAY_VALUES_EQ(b, 3, "Failed on <1,2,3>.", 1, 2, 3);
-//     ASSERT_ARRAY_VALUES_EQ(b, 3, "Failed on <1,2,3>.", 1, 2, 4);
-//     ASSERT_ARRAY_VALUES_EQ(b, 3, "Failed on <1,2,3>.", 1, 2, 5);
-//     ASSERT_ARRAY_VALUES_EQ(b, 3, "Failed on <1,2,3>.", 1, 3, 4);
-//     ASSERT_ARRAY_VALUES_EQ(b, 3, "Failed on <1,2,3>.", 1, 3, 5);
-//     ASSERT_ARRAY_VALUES_EQ(b, 3, "Failed on <1,2,3>.", 1, 4, 5);
-//     ASSERT_ARRAY_VALUES_EQ(b, 3, "Failed on <1,2,3>.", 2, 3, 4);
-//     ASSERT_ARRAY_VALUES_EQ(b, 3, "Failed on <1,2,3>.", 2, 3, 5);
-//     ASSERT_ARRAY_VALUES_EQ(b, 3, "Failed on <1,2,3>.", 2, 4, 5);
-//     ASSERT_ARRAY_VALUES_EQ(b, 3, "Failed on <1,2,3>.", 3, 4, 5);
 // } END_TEST
 
 
