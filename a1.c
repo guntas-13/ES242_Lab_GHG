@@ -52,14 +52,6 @@ void previous_permutation(int a[], int n)
  * a[0..k-1] is the smallest selection and a[n-k..n-1] is the largest.
  */
 
-void print_array_b(int *b, int k, void *data)
-{
-    for (int i = 0; i < k; i++){
-        printf("%d ", b[i]);
-    }
-    printf("\n");
-}
-
 void selections(int a[], int b[], int start, int end, int index, int k, void *data, void (*process_selection)(int *b, int k, void *data))
 {
     if (index == k)
@@ -173,10 +165,5 @@ int main()
             TEST(previous_permutation),
             0
         });
-    // int a[] = {2, 1, 6, 5};
-    // int n = 4;
-    // int k = 2;
-    // int b[k];
-    // generate_selections(a, n, k, b, NULL, print_array_b);
     return 0;
 }
