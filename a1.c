@@ -2,63 +2,6 @@
 
 #include <stdio.h>
 #include <string.h>
-// This is Hitesh here.
-/*
- * See Exercise 2 (a), page 94 in Jeff Erickson's textbook.
- * The exercise only asks you to count the possible splits.
- * In this assignment, you have to generate all possible splits into buf[]
- * and call process_split() to process them.
- * The dictionary parameter is an array of words, sorted in dictionary order.
- * nwords is the number of words in this dictionary.
- */
-int isWord(char *b, const char *dictionary[], int nwords){
-    for (int i = 0; i < nwords; i++){
-        if (strcmp(dictionary[i], b) == 0){
-            return 1;
-        }
-    }return 0;
-}
-void printc(char *b){
-    for (int i = 0; b[i] != '\0'; i++){
-        printf("%c", b[i]);
-    }
-}
-
-void split_it(char* b, int s, int a_len, const char* dictionary[], int nwords, char buf[], void* data, void(*process_split(char buf[], void *data)))
-{
-    int end_idx = s;
-    printf("%s",b);
-    char* a;
-    while(end_idx < a_len)
-    {
-        a[end_idx] = b[end_idx];
-        a[end_idx+1] = '\0';
-        printf("%s",a);
-        if(isWord(a,dictionary,nwords)){
-            char* r;
-            for (int i = s; a[i]!='\0'; i++){
-                r[i] = a[i];
-            }
-            printf("%s\n",r);
-            split_it(r,end_idx+1,a_len,dictionary,nwords,buf,data,process_split);
-            // printf("e%d\n",end_idx);
-        }
-        end_idx++;
-        // printf("%d\n",end_idx);
-    // }if(end_idx == a_len - 1){
-    //     if(isWord(b,dictionary,nwords)){
-    //         // store the split in buf and process it.
-    //         printf("reached end\n");
-    //     }return;
-    }
-}
-
-void generate_splits(const char *source, const char *dictionary[], int nwords, char buf[], void *data, void(*process_split(char buf[], void *data)))
-{
-    int i = 0; 
-    while(source[i] != '\0'){i++;}
-    split_it((char*)source,0,i,dictionary,nwords,buf,data,process_split);
-}
 
 /*
  * Transform a[] so that it becomes the previous permutation of the elements in it.
@@ -200,16 +143,90 @@ void test_splits_art(char buf[], void *data)
     }
 }
 
+// This is Hitesh here.
+/*
+ * See Exercise 2 (a), page 94 in Jeff Erickson's textbook.
+ * The exercise only asks you to count the possible splits.
+ * In this assignment, you have to generate all possible splits into buf[]
+ * and call process_split() to process them.
+ * The dictionary parameter is an array of words, sorted in dictionary order.
+ * nwords is the number of words in this dictionary.
+ */
+int isWord(char *b, const char *dictionary[], int nwords){
+    for (int i = 0; i < nwords; i++){
+        if (strcmp(dictionary[i], b) == 0){
+            return 1;
+        }
+    }return 0;
+}
+void printc(char *b){
+    for (int i = 0; b[i] != '\0'; i++){
+        printf("%c", b[i]);
+    }
+}
+int gj = 0;
+void split_it(char* b,char* temp, int s, int a_len, const char* dictionary[], int nwords, char buf[], void* data, void(*process_split(char buf[], void *data)))
+{
+    if(a_len <= 0){
+        return;
+    }
+    int end_idx = s;
+    printf("b = %s\n",b);
+    char a[256];
+    int j = 0;
+    printf("a_len = %d\n",a_len);
+    while(a_len > 0)
+    {
+        temp[gj]= b[end_idx];
+        a[j] = b[end_idx];
+        printf("j,endidx = %d,%d\n",j,end_idx);
+        temp[gj+1] = '\0';
+        a[j+1] = '\0';
+        // printf("%s",a);
+        if(isWord(a,dictionary,nwords)){
+            gj++;
+            temp[gj] = ' ';
+            gj++;
+            temp[gj] = '\0';
+            printf("******temp = '%s'\n",temp);
+            int k = 0;
+            char* rest = (char*)malloc((a_len+1)*sizeof(char));
+            for (; b[k] != '\0'; k++)
+            {
+                rest[k] = b[end_idx+k+1];
+            }rest[k] = '\0';
+            printf("rest = %s, end_idx = %d\n",rest,end_idx);
+            
+            return split_it(rest,temp,0,a_len-end_idx-1,dictionary,nwords,buf,data,process_split);
+            // printf("e%d\n",end_idx);
+        }
+        end_idx++;j++;gj++;
+    }
+}
+
+void generate_splits(const char *source, const char *dictionary[], int nwords, char buf[], void *data, void(*process_split(char buf[], void *data)))
+{
+    int i = 0; 
+    while(source[i] != '\0'){i++;}
+    char temp[256];
+    split_it((char*)source,temp,0,i,dictionary,nwords,buf,data,process_split);
+}
 
 //// RUNNING TEST ON ALL THREE!!!
 
 int main()
 {
     
-    run_tests((test_t[]) {
-            TEST(generate_selections),
-            TEST(previous_permutation),
-            0
-        });
+    // run_tests((test_t[]) {
+    //         TEST(generate_selections),
+    //         TEST(previous_permutation),
+    //         0
+    //     });
+
+    const char* dictionary[] = {"ART","ARTIST","IS","OIL","TOIL"};
+    const char* source = "ARTISTOIL";
+    int nwords = 5;
+    char buf[256];
+    generate_splits(source,dictionary,nwords,buf,NULL,NULL);
     return 0;
 }
