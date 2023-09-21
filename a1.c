@@ -11,8 +11,54 @@
  * The dictionary parameter is an array of words, sorted in dictionary order.
  * nwords is the number of words in this dictionary.
  */
-void generate_splits(const char *source, const char *dictionary[], int nwords, char buf[], void *data, void (*process_split(char buf[], void *data)))
-{}
+int isWord(char *b, const char *dictionary[], int nwords){
+    for (int i = 0; i < nwords; i++){
+        if (strcmp(dictionary[i], b) == 0){
+            return 1;
+        }
+    }return 0;
+}
+void printc(char *b){
+    for (int i = 0; b[i] != '\0'; i++){
+        printf("%c", b[i]);
+    }
+}
+
+void split_it(char* b, int s, int a_len, const char* dictionary[], int nwords, char buf[], void* data, void(*process_split(char buf[], void *data)))
+{
+    int end_idx = s;
+    printf("%s",b);
+    char* a;
+    while(end_idx < a_len)
+    {
+        a[end_idx] = b[end_idx];
+        a[end_idx+1] = '\0';
+        printf("%s",a);
+        if(isWord(a,dictionary,nwords)){
+            char* r;
+            for (int i = s; a[i]!='\0'; i++){
+                r[i] = a[i];
+            }
+            printf("%s\n",r);
+            split_it(r,end_idx+1,a_len,dictionary,nwords,buf,data,process_split);
+            // printf("e%d\n",end_idx);
+        }
+        end_idx++;
+        // printf("%d\n",end_idx);
+    // }if(end_idx == a_len - 1){
+    //     if(isWord(b,dictionary,nwords)){
+    //         // store the split in buf and process it.
+    //         printf("reached end\n");
+    //     }return;
+    }
+}
+
+void generate_splits(const char *source, const char *dictionary[], int nwords, char buf[], void *data, void(*process_split(char buf[], void *data)))
+{
+    int i = 0; 
+    while(source[i] != '\0'){i++;}
+    split_it((char*)source,0,i,dictionary,nwords,buf,data,process_split);
+}
 
 /*
  * Transform a[] so that it becomes the previous permutation of the elements in it.
