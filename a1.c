@@ -1,6 +1,7 @@
 #include "test.h"
 
 #include <stdio.h>
+#include <string.h>
 // This is Hitesh here.
 /*
  * See Exercise 2 (a), page 94 in Jeff Erickson's textbook.
@@ -41,28 +42,6 @@ void previous_permutation(int a[], int n)
             }
 }
 
-/* Write your tests here. Use the previous assignment for reference. */
-BEGIN_TEST(previous_permutation) {
-    int a[] = { 2, 3 ,1 };
-    previous_permutation(a, 3);
-    ASSERT_ARRAY_VALUES_EQ(a, 3, "Failed on <2,3,1>.", 2, 1, 3);
-
-    int b[] = { 1, 3, 2 };
-    previous_permutation(b, 3);
-    ASSERT_ARRAY_VALUES_EQ(b, 3, "Failed on <1,3,2>.", 1, 2, 3);
-
-    int c[] = { 2, 1, 3, 4 };
-    previous_permutation(c, 4);
-    ASSERT_ARRAY_VALUES_EQ(c, 4, "Failed on <2,1,3,4>.", 1, 4, 3, 2);
-
-    int d[] = { [0]=2, [1]=1, [2]=3, [3]=4, [4] = 5};
-    previous_permutation(d, 5);
-    ASSERT_ARRAY_VALUES_EQ(d, 5, "Failed on <2,1,3,4,5>.", 1, 5, 4, 3, 2); /* lexiographic permutation in this case is 2,1,3,4,5 ggs*/
-
-}END_TEST
-
-
-
 // This is Guntas Singh Saran - 22110089 !
 /*
  * Generate k-selections of a[0..n-1] in lexicographic order and call process_selection to process them.
@@ -97,26 +76,107 @@ void selections(int a[], int b[], int start, int end, int index, int k, void *da
 
 void generate_selections(int a[], int n, int k, int b[], void *data, void (*process_selection)(int *b, int k, void *data))
 {
-    selections(a, b, 0, n - 1, 0, k, data, process_selection);
+    selections(a, b, 0, n, 0, k, data, process_selection);
 }
+
+// TESTS BEGIN FROM HERE!!!!!
+
+typedef struct {
+    int index;
+    int err;
+} state_t;
+
+static void test_selections_2165(int b[], int k, void *data)
+{
+    state_t *s = (state_t *)data;
+    s->err = 0;
+    switch (s->index) {
+    case 0:
+        if ((b[0] != 2) || (b[1] != 1)) {
+            s->err = 1;
+        }
+        break;
+    case 1:
+        if ((b[0] != 2) || (b[1] != 6)) {
+            s->err = 1;
+        }
+        break;
+    case 2:
+        if ((b[0] != 2) || (b[1] != 5)) {
+            s->err = 1;
+        }
+        break;
+    case 3:
+        if ((b[0] != 1) || (b[1] != 6)) {
+            s->err = 1;
+        }
+        break;
+    case 4:
+        if ((b[0] != 1) || (b[1] != 5)) {
+            s->err = 1;
+        }
+        break;
+    case 5:
+        if ((b[0] != 6) || (b[1] != 5)) {
+            s->err = 1;
+        }
+        break;
+    default:
+        s->err = 1;
+    }
+    ++(s->index);
+}
+
+
+BEGIN_TEST(previous_permutation) {
+    int a[] = { 1, 5, 6, 2, 3, 4 };
+    previous_permutation(a, 6);
+    ASSERT_ARRAY_VALUES_EQ(a, 6, "Failed on 1 5 6 2 3 4.", 1, 5, 4, 6, 3, 2);
+} END_TEST
+
+BEGIN_TEST(generate_selections) {
+    int a[] = { 2, 1, 6, 5 };
+    int b[2];
+    state_t s2165 = { .index = 0, .err = 1 };
+    generate_selections(a, 4, 2, b, &s2165, test_selections_2165);
+    ASSERT(!s2165.err, "Failed on 2 1 6 5.");
+} END_TEST
+
+void test_splits_art(char buf[], void *data)
+{
+    state_t *s = (state_t*)data;
+    s->err = 0;
+    switch (s->index) {
+    case 0:
+        if (!strcmp(buf, "art is toil")) {
+            s->err = 1;
+        }
+        break;
+    case 1:
+        if (!strcmp(buf, "artist oil")) {
+            s->err = 1;
+        }
+        break;
+    default:
+        s->err = 1;
+    }
+}
+
+
+//// RUNNING TEST ON ALL THREE!!!
 
 int main()
 {
-    // run_tests ((test_t []){
-    //     TEST(generate_selections),
-    //     0
-    // });
     
-    int a[] = {1, 2, 3, 4, 5};
-    int n = 5;
-    int k = 2;
-    int b[k];
-    generate_selections(a, n, k, b, NULL, print_array_b);
-    
-    // testing previous permutations
-    run_tests ((test_t []){
-        TEST(previous_permutation),
-        0
-    });
+    run_tests((test_t[]) {
+            TEST(generate_selections),
+            TEST(previous_permutation),
+            0
+        });
+    // int a[] = {2, 1, 6, 5};
+    // int n = 4;
+    // int k = 2;
+    // int b[k];
+    // generate_selections(a, n, k, b, NULL, print_array_b);
     return 0;
 }
