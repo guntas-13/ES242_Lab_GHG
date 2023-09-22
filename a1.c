@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 
-// Hi! This is Hitesh here - 22110098.
+/// THIS QUESTION IS DONE BY HITESH KUMAR - 22110098
 /*
  * See Exercise 2 (a), page 94 in Jeff Erickson's textbook.
  * The exercise only asks you to count the possible splits.
@@ -91,12 +91,13 @@ void generate_splits(const char *source, const char *dictionary[], int nwords, c
     split_it((char *)source, temp, i, dictionary, nwords, buf, data, process_split);
 }
 
+
+/// THIS QUESTION IS DONE BY GAURAV BUDHWANI - 22110085
 /*
  * Transform a[] so that it becomes the previous permutation of the elements in it.
  * If a[] is the first permutation, leave it unchanged.
  */
 
-// This is Gaurav Budhwani - 22110085 :)
 void previous_permutation(int a[], int n)
 {
     int first = n - 2, second = n - 1, temp, m, k = 0, i;
@@ -119,7 +120,8 @@ void previous_permutation(int a[], int n)
     }
 }
 
-// This is Guntas Singh Saran - 22110089 !
+
+/// THIS QUESTION IS DONE BY GUNTAS SINGH SARAN - 22110089
 /*
  * Generate k-selections of a[0..n-1] in lexicographic order and call process_selection to process them.
  *
@@ -150,51 +152,47 @@ void generate_selections(int a[], int n, int k, int b[], void *data, void (*proc
 
 // TESTS BEGIN FROM HERE!!!!!
 
-typedef struct
-{
+typedef struct {
     int index;
     int err;
+    int first;
 } state_t;
 
 static void test_selections_2165(int b[], int k, void *data)
 {
     state_t *s = (state_t *)data;
-    s->err = 0;
-    switch (s->index)
-    {
+    if (s->first) {
+        s->err = 0;
+        s->first = 0;
+    }
+    switch (s->index) {
     case 0:
-        if ((b[0] != 2) || (b[1] != 1))
-        {
+        if ((b[0] != 2) || (b[1] != 1)) {
             s->err = 1;
         }
         break;
     case 1:
-        if ((b[0] != 2) || (b[1] != 6))
-        {
+        if ((b[0] != 2) || (b[1] != 6)) {
             s->err = 1;
         }
         break;
     case 2:
-        if ((b[0] != 2) || (b[1] != 5))
-        {
+        if ((b[0] != 2) || (b[1] != 5)) {
             s->err = 1;
         }
         break;
     case 3:
-        if ((b[0] != 1) || (b[1] != 6))
-        {
+        if ((b[0] != 1) || (b[1] != 6)) {
             s->err = 1;
         }
         break;
     case 4:
-        if ((b[0] != 1) || (b[1] != 5))
-        {
+        if ((b[0] != 1) || (b[1] != 5)) {
             s->err = 1;
         }
         break;
     case 5:
-        if ((b[0] != 6) || (b[1] != 5))
-        {
+        if ((b[0] != 6) || (b[1] != 5)) {
             s->err = 1;
         }
         break;
@@ -204,64 +202,88 @@ static void test_selections_2165(int b[], int k, void *data)
     ++(s->index);
 }
 
-BEGIN_TEST(previous_permutation)
+void count_selections(int b[], int k, void *data)
 {
-    int a[] = {1, 5, 6, 2, 3, 4};
-    previous_permutation(a, 6);
-    ASSERT_ARRAY_VALUES_EQ(a, 6, "Failed on 1 5 6 2 3 4.", 1, 5, 4, 6, 3, 2);
+    int *d = (int*)data;
+    ++*d;
 }
-END_TEST
 
-BEGIN_TEST(generate_selections)
+typedef struct {
+    int b[100];
+} selection_t;
+
+void last_selection(int b[], int k, void *data)
 {
-    int a[] = {2, 1, 6, 5};
-    int b[2];
-    state_t s2165 = {.index = 0, .err = 1};
+    selection_t *s = (selection_t*)data;
+    for (int i = 0; i < k; ++i) {
+        s->b[i] = b[i];
+    }
+}
+
+BEGIN_TEST(generate_selections) {
+    int a[] = { 2, 1, 6, 5 };
+    int b[10];
+    state_t s2165 = { .index = 0, .err = 1, .first = 1 };
     generate_selections(a, 4, 2, b, &s2165, test_selections_2165);
     ASSERT(!s2165.err, "Failed on 2 1 6 5.");
-}
-END_TEST
+    int c = 0;
+    int aa[] = { 1, 5, 3, 0, 1, 12, 4, 3, 6, 6 };
+    generate_selections(aa, 10, 5, b, &c, count_selections);
+    ASSERT_EQ(c, 252, "Failed on 10C5.");
 
-void *test_splits_art(char buf[], void *data)
+    selection_t s;
+    generate_selections(aa, 10, 5, b, &s, last_selection);
+    ASSERT_ARRAY_VALUES_EQ(s.b, 5, "Failed on last of 10C5.", 12, 4, 3, 6, 6);
+} END_TEST
+
+void test_splits_art(char buf[], void *data)
 {
-    state_t *s = (state_t *)data;
-    s->err = 0;
-    switch (s->index)
-    {
+    state_t *s = (state_t*)data;
+    if (s->first) {
+        s->err = 0;
+        s->first = 0;
+    }
+    switch (s->index) {
     case 0:
-        if (!strcmp(buf, "art is toil"))
-        {
+        if (strcmp(buf, "art is toil")) {
             s->err = 1;
         }
         break;
     case 1:
-        if (!strcmp(buf, "artist oil"))
-        {
+        if (strcmp(buf, "artist oil")) {
             s->err = 1;
         }
         break;
     default:
         s->err = 1;
     }
+    ++(s->index);
 }
 
-BEGIN_TEST(generate_splits)
-{
+BEGIN_TEST(generate_splits) {
     const char *a = "artistoil";
     const char *dict[] = {
         "art",
         "artist",
         "is",
         "oil",
-        "toil"};
+        "toil"
+    };
     int nwords = 5;
-    state_t s = {.index = 0, .err = 1};
+    state_t s = { .index = 0, .err = 1, .first = 1 };
     char buf[256];
     generate_splits(a, dict, nwords, buf, &s, test_splits_art);
     ASSERT(!s.err, "Failed on 'artistoil'.");
-}
-END_TEST
-// RUNNING TEST ON ALL THREE!!!
+} END_TEST
+
+BEGIN_TEST(previous_permutation) {
+    int a[] = { 1, 5, 6, 2, 3, 4 };
+    previous_permutation(a, 6);
+    ASSERT_ARRAY_VALUES_EQ(a, 6, "Failed on 1 5 6 2 3 4.", 1, 5, 4, 6, 3, 2);
+    int aa[] = { 1, 2, 3, 5, 4, 6 };
+    previous_permutation(aa, 3); // 3 is correct.
+    ASSERT_ARRAY_VALUES_EQ(aa, 3, "Failed on 1 2 3.", 1, 2, 3);
+} END_TEST
 
 int main()
 {
@@ -271,11 +293,5 @@ int main()
         TEST(previous_permutation),
         TEST(generate_splits),
         0});
-
-    // const char* dictionary[] = {"BOTH","THE","HEAR","HEART","HEARTH","AND","SATURN","TURN","SPIN","PIN","URN","ART","HAND","SAT","BOT","HE"};
-    // const char* source = "BOTHEARHEARTHANDSATURNSPIN";
-    // int nwords = 16;
-    // char buf[256];
-    // generate_splits(source,dictionary,nwords,buf,NULL,NULL);
     return 0;
 }
