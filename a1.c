@@ -60,6 +60,90 @@ void generate_selections(int a[], int n, int k, int b[], void *data, void (*proc
     selections(a, b, 0, n, 0, k, data, process_selection);
 }
 
+// This is Hitesh here.
+/*
+ * See Exercise 2 (a), page 94 in Jeff Erickson's textbook.
+ * The exercise only asks you to count the possible splits.
+ * In this assignment, you have to generate all possible splits into buf[]
+ * and call process_split() to process them.
+ * The dictionary parameter is an array of words, sorted in dictionary order.
+ * nwords is the number of words in this dictionary.
+ */
+int isWord(char *b, const char *dictionary[], int nwords){
+    for (int i = 0; i < nwords; i++){
+        if (strcmp(dictionary[i], b) == 0){
+            return 1;
+        }
+    }return 0;
+}
+void printc(char *b){
+    for (int i = 0; b[i] != '\0'; i++){
+        printf("%c", b[i]);
+    }printf("\n");
+}
+int gj = 0;
+void split_it(char* b,char* temp, int s, int a_len, const char* dictionary[], int nwords, char buf[], void* data, void(*process_split(char buf[], void *data)))
+{
+    if(a_len <= 0){
+        int i = 0;
+        for (; temp[i]!='\0'; i++)
+        {
+            buf[i] = temp[i];
+        }buf[i-1] = '\0';
+        // printc(buf);
+        process_split(buf,data);
+        buf[0] = '\0';
+        temp[0] = '\0';
+        gj = 0;
+        return;
+    }
+    // int end_idx = s;
+    // printf("b = %s\n",b);
+    char a[256];
+    int j = 0;
+    // printf("a_len = %d\n",a_len);
+    for(int l = 0; l < a_len ; l++)
+    {
+        a[j] = b[j];
+        a[j+1] = '\0';
+        // printf("j = %d\n",j);
+        // printf("a in loop = %s\n",a);
+
+        if(isWord(a,dictionary,nwords)){
+            // printf("a is word = %s\n",a);
+            for (int i = 0; a[i] != '\0'; i++)
+            {
+                temp[gj] = a[i];gj++;
+            }temp[gj] = ' ';gj++;
+            temp[gj] = '\0';
+            
+            // printf("******temp = '%s'\n",temp);
+            int k = 0;
+            char* rest = (char*)malloc((a_len+1)*sizeof(char));
+            for (; b[k] != '\0'; k++)
+            {
+                rest[k] = b[j+k+1];
+            }rest[k] = '\0';
+            // printf("rest = '%s', j = %d\n",rest,j);
+            
+            split_it(rest,temp,0,a_len-j-1,dictionary,nwords,buf,data,process_split);
+        }
+        j++;
+    }
+
+
+
+    
+    
+}
+
+void generate_splits(const char *source, const char *dictionary[], int nwords, char buf[], void *data, void(*process_split(char buf[], void *data)))
+{
+    int i = 0; 
+    while(source[i] != '\0'){i++;}
+    char temp[256];
+    split_it((char*)source,temp,0,i,dictionary,nwords,buf,data,process_split);
+}
 // TESTS BEGIN FROM HERE!!!!!
 
 typedef struct {
@@ -108,21 +192,6 @@ static void test_selections_2165(int b[], int k, void *data)
     ++(s->index);
 }
 
-
-BEGIN_TEST(previous_permutation) {
-    int a[] = { 1, 5, 6, 2, 3, 4 };
-    previous_permutation(a, 6);
-    ASSERT_ARRAY_VALUES_EQ(a, 6, "Failed on 1 5 6 2 3 4.", 1, 5, 4, 6, 3, 2);
-} END_TEST
-
-BEGIN_TEST(generate_selections) {
-    int a[] = { 2, 1, 6, 5 };
-    int b[2];
-    state_t s2165 = { .index = 0, .err = 1 };
-    generate_selections(a, 4, 2, b, &s2165, test_selections_2165);
-    ASSERT(!s2165.err, "Failed on 2 1 6 5.");
-} END_TEST
-
 void test_splits_art(char buf[], void *data)
 {
     state_t *s = (state_t*)data;
@@ -143,90 +212,53 @@ void test_splits_art(char buf[], void *data)
     }
 }
 
-// This is Hitesh here.
-/*
- * See Exercise 2 (a), page 94 in Jeff Erickson's textbook.
- * The exercise only asks you to count the possible splits.
- * In this assignment, you have to generate all possible splits into buf[]
- * and call process_split() to process them.
- * The dictionary parameter is an array of words, sorted in dictionary order.
- * nwords is the number of words in this dictionary.
- */
-int isWord(char *b, const char *dictionary[], int nwords){
-    for (int i = 0; i < nwords; i++){
-        if (strcmp(dictionary[i], b) == 0){
-            return 1;
-        }
-    }return 0;
-}
-void printc(char *b){
-    for (int i = 0; b[i] != '\0'; i++){
-        printf("%c", b[i]);
-    }
-}
-int gj = 0;
-void split_it(char* b,char* temp, int s, int a_len, const char* dictionary[], int nwords, char buf[], void* data, void(*process_split(char buf[], void *data)))
-{
-    if(a_len <= 0){
-        return;
-    }
-    int end_idx = s;
-    printf("b = %s\n",b);
-    char a[256];
-    int j = 0;
-    printf("a_len = %d\n",a_len);
-    while(a_len > 0)
-    {
-        temp[gj]= b[end_idx];
-        a[j] = b[end_idx];
-        printf("j,endidx = %d,%d\n",j,end_idx);
-        temp[gj+1] = '\0';
-        a[j+1] = '\0';
-        // printf("%s",a);
-        if(isWord(a,dictionary,nwords)){
-            gj++;
-            temp[gj] = ' ';
-            gj++;
-            temp[gj] = '\0';
-            printf("******temp = '%s'\n",temp);
-            int k = 0;
-            char* rest = (char*)malloc((a_len+1)*sizeof(char));
-            for (; b[k] != '\0'; k++)
-            {
-                rest[k] = b[end_idx+k+1];
-            }rest[k] = '\0';
-            printf("rest = %s, end_idx = %d\n",rest,end_idx);
-            
-            return split_it(rest,temp,0,a_len-end_idx-1,dictionary,nwords,buf,data,process_split);
-            // printf("e%d\n",end_idx);
-        }
-        end_idx++;j++;gj++;
-    }
-}
+BEGIN_TEST(previous_permutation) {
+    int a[] = { 1, 5, 6, 2, 3, 4 };
+    previous_permutation(a, 6);
+    ASSERT_ARRAY_VALUES_EQ(a, 6, "Failed on 1 5 6 2 3 4.", 1, 5, 4, 6, 3, 2);
+} END_TEST
 
-void generate_splits(const char *source, const char *dictionary[], int nwords, char buf[], void *data, void(*process_split(char buf[], void *data)))
-{
-    int i = 0; 
-    while(source[i] != '\0'){i++;}
-    char temp[256];
-    split_it((char*)source,temp,0,i,dictionary,nwords,buf,data,process_split);
-}
+BEGIN_TEST(generate_selections) {
+    int a[] = { 2, 1, 6, 5 };
+    int b[2];
+    state_t s2165 = { .index = 0, .err = 1 };
+    generate_selections(a, 4, 2, b, &s2165, test_selections_2165);
+    ASSERT(!s2165.err, "Failed on 2 1 6 5.");
+} END_TEST
+
+BEGIN_TEST(generate_splits) {
+    const char *a = "artistoil";
+    const char *dict[] = {
+        "art",
+        "artist",
+        "is",
+        "oil",
+        "toil"
+    };
+    int nwords = 5;
+    state_t s = { .index = 0, .err = 1 };
+    char buf[256];
+    generate_splits(a, dict, nwords, buf, &s, test_splits_art);
+    ASSERT(!s.err, "Failed on 'artistoil'.");
+} END_TEST
+
 
 //// RUNNING TEST ON ALL THREE!!!
 
 int main()
 {
     
-    // run_tests((test_t[]) {
-    //         TEST(generate_selections),
-    //         TEST(previous_permutation),
-    //         0
-    //     });
+    run_tests((test_t[]) {
+            TEST(generate_selections),
+            TEST(previous_permutation),
+            TEST(generate_splits),
+            0
+        });
 
-    const char* dictionary[] = {"ART","ARTIST","IS","OIL","TOIL"};
-    const char* source = "ARTISTOIL";
-    int nwords = 5;
-    char buf[256];
-    generate_splits(source,dictionary,nwords,buf,NULL,NULL);
+    // const char* dictionary[] = {"ART","ARTIST","IS","OIL","TOIL"};
+    // const char* source = "ARTISTOIL";
+    // int nwords = 5;
+    // char buf[256];
+    // generate_splits(source,dictionary,nwords,buf,NULL,NULL);
     return 0;
 }
