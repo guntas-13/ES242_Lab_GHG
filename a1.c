@@ -25,7 +25,7 @@ int isWord(char *b, const char *dictionary[], int nwords)
 }
 
 int temp_index = 0;
-void split_it(char *b, char *temp, int a_len, const char *dictionary[], int nwords, char buf[], void *data, void(*process_split(char buf[], void *data)))
+void split_it(char *b, char *temp, int a_len, const char *dictionary[], int nwords, char buf[], void *data, void (process_split(char buf[], void *data)))
 {
     if (a_len <= 0)
     {
@@ -35,13 +35,14 @@ void split_it(char *b, char *temp, int a_len, const char *dictionary[], int nwor
             buf[i] = temp[i];
         }
         buf[i - 1] = '\0';
+        // printf("%s\n",buf);                         
         process_split(buf, data);
         buf[0] = '\0';
         return;
     }
     // int end_idx = s;
     // printf("b = %s\n",b);
-    char a[256];
+    char a[sizeof(b)];
     int j = 0;
     int temp_a_len = a_len;
     // printf("a_len = %d\n",a_len);
@@ -64,7 +65,7 @@ void split_it(char *b, char *temp, int a_len, const char *dictionary[], int nwor
 
             // printf("******temp = '%s'\n",temp);
             int k = 0;
-            char str_left[256];
+            char str_left[sizeof(b)];
             for (; b[k] != '\0'; k++)
             {
                 str_left[k] = b[j + k + 1];
@@ -80,14 +81,14 @@ void split_it(char *b, char *temp, int a_len, const char *dictionary[], int nwor
     }
 }
 
-void generate_splits(const char *source, const char *dictionary[], int nwords, char buf[], void *data, void(*process_split(char buf[], void *data)))
+void generate_splits(const char *source, const char *dictionary[], int nwords, char buf[], void *data, void (process_split(char buf[], void *data)))
 {
     int i = 0;
     while (source[i] != '\0')
     {
         i++;
     }
-    char temp[256];
+    char temp[i+1];
     split_it((char *)source, temp, i, dictionary, nwords, buf, data, process_split);
 }
 
