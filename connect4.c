@@ -272,7 +272,7 @@ int evaluating_board(char player)
         }
     }
 
-    // Check diagonals (upward)
+    // Check diagonals  (upward)
     for (int row = 3; row < ROWS; row++)
     {
         for (int col = 0; col <= COLS - 4; col++)
