@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <assert.h>
-
+#include <stdlib.h>
 // #include "test.h"
 /*
  * The status of a line.
@@ -141,50 +141,54 @@ move_t best_move(board_t board, player_t player)
     return candidate; 
 }
 
-int main()
-{
+
+
+int main() {
     /* Your game play logic. */
     /* The user should have the option to select red or blue player. */
     int move, line;
     player_t current = RED;
     board_t board;
     move_t response;
-    // printf("%d\n",current);
-    // printf("%d\n",other_player(current));
+    response.score = 0;
+    char color;
     init_board(board);
-    // printf("%d\n",has_won(board,current));
-    // board[5] = RED;
-    // printf("%d\n",has_won(board,other_player(current)));
-    // printf("%d\n",is_full(board));
-
-    while(1){
-        if (has_won(board,current)){
+    printf("First Player is RED.\n");
+    printf("Choose color 'R' for Red, 'B' for Blue: ");
+    scanf("%c",&color);
+    if(color != 'R' && color != 'B'){
+        printf("INVALID CHOICE!");
+        exit(0);
+    }
+    
+        while (1) {
             print_board(board);
-            printf("Player %d has won!\n",current);
-            break;
-        }else if (is_full(board)){
-            print_board(board);
-            printf("Draw.\n");
-            break;
-        }
-        if(current == BLUE){
-            printf("Your Move: ");
-            scanf("%d",&move);
-            line = move;
-            if(board[line] != NO){
-                printf("INVALID CHOICE!\n");
+            if (has_won(board, current)) {
+                print_board(board);
+                printf("Player %d has won!\n", current);
+                break;
+            } else if (is_full(board)) {
+                print_board(board);
+                printf("Draw.\n");
                 break;
             }
-            board[line] = current;
-            printf("Player %d has played %d\n",current,line);
-        }else{
-            response = best_move(board, current);
-            board[response.line] = current;
-            printf("Player %d has played %d\n",current,response.line);
+            if ((color == 'R' && current == RED) || (color == 'B' && current == BLUE)) {
+                printf("Your Move: ");
+                scanf("%d", &move);
+                line = move;
+                if (board[line] != NO) {
+                    printf("INVALID CHOICE!\n");
+                    break;
+                }
+                board[line] = current;
+                printf("Player %d has played %d\n", current, line);
+            } else {
+                response = best_move(board, current);
+                board[response.line] = current;
+                printf("Player %d has played %d\n", current, response.line);
+            }
+            current = other_player(current);
+
         }
-        current = other_player(current);
-        print_board(board);
-        
-    }
     return 0;
 }
