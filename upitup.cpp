@@ -7,7 +7,6 @@
 #include<queue>
 #include<assert.h>
 #include<string.h>
-// #include "queue.hpp"
 using namespace std;
 
 struct board{
@@ -18,19 +17,6 @@ enum {
     X=1,
     O=2
 };
-// enum{
-//     L=1, R=2, U=3, D=4
-// };
-// int encode_configuration(int arr[]){
-//     int i;
-//     for(i=0;i<6;i++){
-//         if(arr[i]==1){
-//             break;
-//         }
-//     }
-//     if(i==6){return 0;}
-//     return i+1;
-// }
 void print_board(const board& board){
     for(int r=0;r<3;r++){
         for(int c=0;c<3;c++){
@@ -55,20 +41,7 @@ pair<int,int> find_space(const board& board){
     }
     assert(0);
 }
-bool checkvalid(const board& board ){           //Want 1's on the top
-
-    // for(int r=0;r<3;r++){
-    //     if(board.arr[r][0]!=2){return false;}
-    // }
-    // if(board.arr[0][1]!=0){return false;}
-    // if(board.arr[1][1]!=4){return false;}
-    // if(board.arr[2][1]!=3){return false;}
-    // if(board.arr[0][2]!=3){return false;}
-    // if(board.arr[1][2]!=2){return false;}
-    // if(board.arr[2][2]!=2){return false;}
-    // print_board(board);
-    // return true;
-
+bool checkvalid(const board& board ){  
     for(int r=0;r<3;r++){
         for(int c=0;c<3;c++){
             if(board.arr[r][c]>1){return false;}
@@ -78,12 +51,6 @@ bool checkvalid(const board& board ){           //Want 1's on the top
         }
     }
     return true;
-    // for(int r=0;r<3;r++){
-    //     for(int c=0;c<3;c++){
-    //         if(board.arr[r][c]!=0){return false;}
-    //     }
-    // }
-    // return true;
 }
 
 int ord(const board& board){
@@ -105,13 +72,8 @@ board up(board b, int r, int c){
     else if(val==2){val=5;}
     else if(val==5){val=1;}
     else if(val==6){val=2;}
-    // cout<<"Up\n";
-    // print_board(b);
     bnew.arr[r][c]=val;
     bnew.arr[r-1][c]=0;
-    
-    // cout<<endl;
-    // print_board(bnew);
     return bnew;
 }
 
@@ -155,11 +117,10 @@ uint8_t visited[40353600]={0};
 uint64_t parent[40353600];
 
 vector<char> solve(const board& b){
-    // cout<<"Hello"<<endl;
     int count=0;
     queue<board> q;             
     q.push(b);
-    visited[ord(b)] = 1;          //1 means start
+    visited[ord(b)] = 1;          
     while(!q.empty()){
         board u=q.front();
         q.pop();
@@ -178,10 +139,9 @@ vector<char> solve(const board& b){
         auto p=find_space(u);
         int row= p.first;
         int col= p.second;
-        // cout<<row<<col<<endl;
         board a,b,c,d;
         if(row!=0){
-            a=up(u,row,col);              //move the empty box/space up i.e move move upper box down
+            a=up(u,row,col);             
             int aord = ord(a);
             if (!visited[aord]) {
                 visited[aord] = 'U';
