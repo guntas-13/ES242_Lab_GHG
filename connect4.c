@@ -185,35 +185,35 @@ int evaluating_board(char player)
 
             if (count_player == 4)
             {
-                return 1000; // Player wins
+                return 1; // Player wins
             }
             else if (count_opponent == 4)
             {
-                return -1000; // Opponent wins
+                return -1; // Opponent wins
             }
             else if (count_player == 3 && count_opponent == 0)
             {
-                score += 100; // Potential win
+                score += 0; // Potential win
             }
             else if (count_player == 2 && count_opponent == 0)
             {
-                score += 10; // Potential win
+                score += 0; // Potential win
             }
             else if (count_player == 1 && count_opponent == 0)
             {
-                score += 1; // Potential win
+                score += 0; // Potential win
             }
             else if (count_opponent == 3 && count_player == 0)
             {
-                score -= 100; // Potential loss
+                score -= 0; // Potential loss
             }
             else if (count_opponent == 2 && count_player == 0)
             {
-                score -= 10; // Potential loss
+                score -= 0; // Potential loss
             }
             else if (count_opponent == 1 && count_player == 0)
             {
-                score -= 1; // Potential loss
+                score -= 0; // Potential loss
             }
         }
     }
@@ -239,35 +239,35 @@ int evaluating_board(char player)
 
             if (count_player == 4)
             {
-                return 500; // Player wins
+                return 1; // Player wins
             }
             else if (count_opponent == 4)
             {
-                return -500; // Opponent wins
+                return -1; // Opponent wins
             }
             else if (count_player == 3 && count_opponent == 0)
             {
-                score += 50; // Potential win
+                score += 0; // Potential win
             }
             else if (count_player == 2 && count_opponent == 0)
             {
-                score += 5; // Potential win
+                score += 0; // Potential win
             }
             else if (count_player == 1 && count_opponent == 0)
             {
-                score += 1; // Potential win
+                score += 0; // Potential win
             }
             else if (count_opponent == 3 && count_player == 0)
             {
-                score -= 50; // Potential loss
+                score -= 0; // Potential loss
             }
             else if (count_opponent == 2 && count_player == 0)
             {
-                score -= 5; // Potential loss
+                score -= 0; // Potential loss
             }
             else if (count_opponent == 1 && count_player == 0)
             {
-                score -= 1; // Potential loss
+                score -= 0; // Potential loss
             }
         }
     }
@@ -293,35 +293,35 @@ int evaluating_board(char player)
 
             if (count_player == 4)
             {
-                return 1000; // Player wins
+                return 1; // Player wins
             }
             else if (count_opponent == 4)
             {
-                return -1000; // Opponent wins
+                return -1; // Opponent wins
             }
             else if (count_player == 3 && count_opponent == 0)
             {
-                score += 100; // Potential win
+                score += 0; // Potential win
             }
             else if (count_player == 2 && count_opponent == 0)
             {
-                score += 10; // Potential win
+                score += 0; // Potential win
             }
             else if (count_player == 1 && count_opponent == 0)
             {
-                score += 1; // Potential win
+                score += 0; // Potential win
             }
             else if (count_opponent == 3 && count_player == 0)
             {
-                score -= 100; // Potential loss
+                score -= 0; // Potential loss
             }
             else if (count_opponent == 2 && count_player == 0)
             {
-                score -= 10; // Potential loss
+                score -= 0; // Potential loss
             }
             else if (count_opponent == 1 && count_player == 0)
             {
-                score -= 1; // Potential loss
+                score -= 0; // Potential loss
             }
         }
     }
@@ -347,35 +347,35 @@ int evaluating_board(char player)
 
             if (count_player == 4)
             {
-                return 1000; // Player wins
+                return 1; // Player wins
             }
             else if (count_opponent == 4)
             {
-                return -1000; // Opponent wins
+                return -1; // Opponent wins
             }
             else if (count_player == 3 && count_opponent == 0)
             {
-                score += 100; // Potential win
+                score += 0; // Potential win
             }
             else if (count_player == 2 && count_opponent == 0)
             {
-                score += 10; // Potential win
+                score += 0; // Potential win
             }
             else if (count_player == 1 && count_opponent == 0)
             {
-                score += 1; // Potential win
+                score += 0; // Potential win
             }
             else if (count_opponent == 3 && count_player == 0)
             {
-                score -= 100; // Potential loss
+                score -= 0; // Potential loss
             }
             else if (count_opponent == 2 && count_player == 0)
             {
-                score -= 10; // Potential loss
+                score -= 0; // Potential loss
             }
             else if (count_opponent == 1 && count_player == 0)
             {
-                score -= 1; // Potential loss
+                score -= 0; // Potential loss
             }
         }
     }
