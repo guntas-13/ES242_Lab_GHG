@@ -8,6 +8,7 @@
 #include <queue>
 #include <math.h>
 #include <assert.h>
+#include <cstring>
 #include <utility>
 using namespace std;
 
@@ -189,11 +190,11 @@ void read_board(colb& b)
     for (int r = 0; r < 6; ++r) {
         for(int cl = 0; cl < 4; ++cl){
             scanf("%s", &b.c[r][cl]);
-            if (b.c[r][cl]=='r'){
-                b.c[r][cl]='o';
-            }else if (b.c[r][cl]=='o'){
-                b.c[r][cl]='r';
-            }
+            // if (b.c[r][cl]=='r'){
+            //     b.c[r][cl]='o';
+            // }else if (b.c[r][cl]=='o'){
+            //     b.c[r][cl]='r';
+            // }
         }
     }
 }
@@ -228,7 +229,7 @@ board up(const board& b)
     return o;
 }
 
-enum move { R=1,U=2,F=3,R2=4,U2=5,F2=6,R1=7,U1=8,F1=9};
+enum move {R=1,U=2,F=3,R2=4,U2=5,F2=6,R1=7,U1=8,F1=9};
 
 int ord(const board& board){
     int val=0;
@@ -277,46 +278,60 @@ board decode(int ord){
     }
     return node;
 }
-#define maxi1 (5050) 
-#define maxi2 (2190) 
+
+#define maxi1 (5050)
+#define maxi2 (2190)
+
+// Initialize arrays using memset
+void initializeArrays(int visited[maxi1][maxi2], int parent[maxi1][maxi2]) {
+    memset(visited, 0, sizeof(visited));
+    memset(parent, 0, sizeof(parent));
+}
+
 std::vector<int> solve(const board& src, const board& dest)
-{ 
+{
     queue <int> q;
-    int cnt=0;
+    int cnt = 0;
     int visited[maxi1][maxi2];
     int parent[maxi1][maxi2];
-    int initial=ord(src);
-    int final=ord(dest);
+
+    initializeArrays(visited, parent);  // Initialize arrays
+
+    int initial = ord(src);
+    int final = ord(dest);
     q.push(ord(src));
-    board2 tem1=decode(src);
+    board2 tem1 = decode(src);
+
     visited[tem1.o[0]][tem1.o[1]] = U;
-    int temp=0;
-    while (!q.empty()) {
+    int temp = 0;
+
+    while (!q.empty() && temp < 10000) {
         int child = q.front();
         q.pop();
-        board u=decode(child);
-        if (child==final) {
+        board u = decode(child);
+
+        if (child == final) {
             std::vector<int> moves;
-            while (child!=initial) {
-                board2 tem2=decode(decode(child));
+            while (child != initial) {
+                board2 tem2 = decode(decode(child));
                 moves.push_back(visited[tem2.o[0]][tem2.o[1]]);
-                child=parent[tem2.o[0]][tem2.o[1]];
+                child = parent[tem2.o[0]][tem2.o[1]];
             }
             std::reverse(moves.begin(), moves.end());
             std::vector<int> ans;
-            int prev=0;
-            for (auto cur:moves){
-                auto tem=cur;
-                if (cur==prev){
-                    int fla=ans.back();
+            int prev = 0;
+            for (auto cur : moves) {
+                auto tem = cur;
+                if (cur == prev) {
+                    int fla = ans.back();
                     ans.pop_back();
-                    if(fla==cur){
-                        tem+=3;
-                    }else{
-                        tem+=6;
+                    if (fla == cur) {
+                        tem += 3;
+                    } else {
+                        tem += 6;
                     }
                 }
-                prev=cur;
+                prev = cur;
                 ans.push_back(tem);
             }
             return ans;
@@ -334,26 +349,25 @@ std::vector<int> solve(const board& src, const board& dest)
             visited[aord.o[0]][aord.o[1]] = F;
             parent[aord.o[0]][aord.o[1]] = child;
             q.push(ord(a));
-            cnt+=1;
+            cnt += 1;
         }
         if (!visited[bord.o[0]][bord.o[1]]) {
             visited[bord.o[0]][bord.o[1]] = R;
             parent[bord.o[0]][bord.o[1]] = child;
             q.push(ord(b));
-            cnt+=1;
+            cnt += 1;
         }
         if (!visited[cord.o[0]][cord.o[1]]) {
             visited[cord.o[0]][cord.o[1]] = U;
             parent[cord.o[0]][cord.o[1]] = child;
             q.push(ord(c));
-            cnt+=1;
+            cnt += 1;
         }
-        temp+=1;
+        temp += 1;
     }
-    printf("Not possible");
-    return std::vector<int>( );
+    printf("Not possible\n");
+    return std::vector<int>();
 }
-
 void print_moves(const std::vector<int>& moves)
 {
     for (auto m: moves) {
@@ -376,9 +390,9 @@ int main()
 {
     colb src1;
     read_board(src1);
-    colb dest1=trans1(src1);
-    board src=trans(src1,brg(dest1));
-    board dest=trans(dest1,brg(dest1));
+    colb dest1 = trans1(src1);
+    board src = trans(src1, brg(dest1));
+    board dest = trans(dest1, brg(dest1));
     printf("\n");
     printf("Given Input :\n");
     printf("\n");
