@@ -191,27 +191,27 @@ int main() {
 // };
 
 //     CubeState  initialCube = {
-//     {"G", "O", "W"}, {"B", "Y", "R"},
-//     {"G", "W", "R"}, {"B", "O", "Y"},
-//     {"G", "Y", "O"}, {"B", "R", "W"},
-//     {"G", "R", "Y"}, {"B", "W", "O"}
+//     {"G", "R", "Y"}, {"G", "O", "W"},
+//     {"B", "R", "W"}, {"B", "W", "O"},
+//     {"G", "Y", "O"}, {"B", "Y", "R"},
+//     {"B", "O", "Y"}, {"G", "W", "R"}
 // };
 
     CubeState  initialCube = {
-  {"G", "Y", "O"}, {"B", "O", "Y"},
-    {"G", "O", "W"}, {"B", "W", "O"},
-    {"G", "R", "Y"}, {"B", "Y", "R"},
-    {"G", "W", "R"}, {"B", "R", "W"}
+    {"Y", "G", "R"}, {"W", "G", "O"},
+    {"R", "W", "B"}, {"B", "W", "O"},
+    {"Y", "O", "G"}, {"B", "Y", "R"},
+    {"Y", "B", "O"}, {"W", "R", "G"}
 };
 
 
     printCubeState(initialCube);
-    // applyMove(initialCube, Fp);
+    // applyMove(initialCube, R);
+    // applyMove(initialCube, F);
     // applyMove(initialCube, Up);
-    // applyMove(initialCube, R2);
-    applyMove(initialCube, U);
-    applyMove(initialCube, U);
-    applyMove(initialCube, U);
+    // applyMove(initialCube, Rp);
+    // applyMove(initialCube, F2);
+    // applyMove(initialCube, U);
     // printCubeState(initialCube);
     
     vector<Move> solution = solveRubiksCubeBFS(initialCube);
