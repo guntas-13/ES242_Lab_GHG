@@ -13,10 +13,6 @@ struct board{
     int arr[3][3];
 };
 
-enum {
-    X=1,
-    O=2
-};
 void print_board(const board& board){
     for(int r=0;r<3;r++){
         for(int c=0;c<3;c++){
@@ -41,10 +37,11 @@ pair<int,int> find_space(const board& board){
     }
     assert(0);
 }
-bool checkvalid(const board& board ){  
+
+bool isSolvedBoard(const board& board ){  
     for(int r=0;r<3;r++){
         for(int c=0;c<3;c++){
-            if(board.arr[r][c]>1){return false;}
+            if(board.arr[r][c]>1){return false;}    // 0 for _ (empty space), 1 for U (up face), 2 for D (down face), 3,4,5,6 for S (side faces)
             if((r*c==1)){
                 if(board.arr[1][1]!=0){return false;}
             }
@@ -68,7 +65,7 @@ int ord(const board& board){
 board up(board b, int r, int c){
     board bnew=b;
     int val=b.arr[r-1][c];
-    if(val==1){val=6;}
+    if(val==4){val=6;}
     else if(val==2){val=5;}
     else if(val==5){val=1;}
     else if(val==6){val=2;}
@@ -118,21 +115,25 @@ uint64_t parent[40353600];
 
 vector<char> solve(const board& b){
     int count=0;
+    if(isSolvedBoard(b)){
+        vector<char> v;
+        v.push_back('Z');
+        return v;
+    }
     queue<board> q;             
     q.push(b);
-    visited[ord(b)] = 1;          
+    visited[ord(b)] = 'Z';          
     while(!q.empty()){
         board u=q.front();
         q.pop();
-        if(checkvalid(u)){
+        if(isSolvedBoard(u)){
             vector<char> moves;
             int o=ord(u);
-            while(visited[o]!= 1){
+            while(visited[o]!= 'Z'){
                 moves.push_back(visited[o]);
                 o=parent[o];
             }
             std::reverse(moves.begin(), moves.end());
-            print_board(u);
             return moves;
         }   
 
@@ -182,25 +183,26 @@ vector<char> solve(const board& b){
     return v;
 }
 
-void initialize_board(board& b){                              
-    for(int r=0;r<3;r++){                              
-        for(int c=0;c<3;c++){
-            if(r*c==1){
-                b.arr[r][c]=0;
-            }
-            else{
-                int val=2;
-                assert(val!=0);
-                b.arr[r][c]=val;
-            }
-        }
-    }
-    return;
-}
+// void initialize_board(board& b){                              
+//     for(int r=0;r<3;r++){                              
+//         for(int c=0;c<3;c++){
+//             if(r*c==1){
+//                 b.arr[r][c]=0;
+//             }
+//             else{
+//                 int val=2;
+//                 assert(val!=0);
+//                 b.arr[r][c]=val;
+//             }
+//         }
+//     }
+//     return;
+// }
 
 int main(){
     board b;
-    int _[2];
+    cout<<"Input format of board is:"<<endl<<"- - -\n- - -\n- - -"<<endl<<"Enter U, D, or _ as the positions mentioned above"<<endl;
+    int spacePosition[2];
     for (int i = 0; i < 3; i++) {
         string str;
         getline(cin, str);
@@ -214,42 +216,44 @@ int main(){
             else if (input[j] == 'D')
                 b.arr[i][j] = 2;
             if (input[j] == '_') {
-                _[0] = i;
-                _[1] = j;
+                spacePosition[0] = i;
+                spacePosition[1] = j;
             }
         }
     }
     cout<<"Let Me Think..."<<endl;
 
     auto moves=solve(b);
-    cout<<"^^^^ The Final Board Position should look like this."<<endl<<endl;
     if(moves[0]==0){
         cout<<"You Entered an Unsolvable Board Position"<<endl;
-        exit;
+        exit(0);
+    }else if(moves[0] == 'Z'){
+        cout<<"You Entered already Solved Board Position"<<endl;
+        exit(0);
     }
-    cout<<"Let's Start Solving"<<endl;
+    cout<<"Let's Start Solving"<<endl<<"The Seq. of moves are:";
     for(char c: moves){
         print_board(b);
         cout<<endl;
         if (c == 'U'){
-            cout<<"Up->"<<endl;
-            b = up(b,_[0],_[1]);
-            _[0]--;
+            cout<<"Up"<<endl;
+            b = up(b,spacePosition[0],spacePosition[1]);
+            spacePosition[0]--;
         }else if(c == 'D'){
-            cout<<"Down->"<<endl;
-            b = down(b,_[0],_[1]);
-            _[0]++;
+            cout<<"Down"<<endl;
+            b = down(b,spacePosition[0],spacePosition[1]);
+            spacePosition[0]++;
         }else if(c == 'L'){
-            cout<<"Left->"<<endl;
-            b = left(b,_[0],_[1]);
-            _[1]--;
-        }else{
-            cout<<"Right->"<<endl;
-            b = right(b,_[0],_[1]);
-            _[1]++;
+            cout<<"Left"<<endl;
+            b = left(b,spacePosition[0],spacePosition[1]);
+            spacePosition[1]--;
+        }else if(c == 'R'){
+            cout<<"Right"<<endl;
+            b = right(b,spacePosition[0],spacePosition[1]);
+            spacePosition[1]++;
         }
     }
     print_board(b);
-    cout<<"We Solved the Board"<<endl;
+    cout<<endl<<"We Solved the Board"<<endl;
     return  0;
 }
